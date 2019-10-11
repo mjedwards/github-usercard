@@ -24,7 +24,7 @@
           user, and adding that card to the DOM.
 */
 
-const followersArray = [];
+const followersArray = ["https://api.github.com/users/tetondan","https://api.github.com/users/dustinmyers","https://api.github.com/users/justsml","https://api.github.com/users/luishrd","https://api.github.com/users/bigknell"];
 
 /* Step 3: Create a function that accepts a single object as its only argument,
           Using DOM methods and properties, create a component that will return the following DOM element:
@@ -45,6 +45,93 @@ const followersArray = [];
 </div>
 
 */
+let container = document.querySelector('.cards');
+let empty = '#';
+
+followersArray.forEach(el => {
+  axios.get(el)
+  .then(function (response) {
+    // handle success
+    console.log(response);
+    createCard(response);
+  })
+  .catch(function (error) {
+    // handle error
+    console.log(error);
+  })
+  .finally(function () {
+    // always executed
+  });
+
+})
+axios.get('https://api.github.com/users/mjedwards')
+  .then(function (response) {
+    // handle success
+    console.log(response);
+    createCard(response);
+  })
+  .catch(function (error) {
+    // handle error
+    console.log(error);
+  })
+  .finally(function () {
+    // always executed
+  });
+
+function createCard (x) {
+  let card = document.createElement("div");
+    card.classList.add("card");
+
+  let image = document.createElement("img");
+    image.setAttribute("src",  `${x.data.avatar_url}`);
+
+  let cardInfo = document.createElement("div");
+    cardInfo.classList.add("card-info");
+
+  let hThree = document.createElement("h3");
+    hThree.classList.add("name");
+    hThree.textContent = x.data.name;
+
+  let pUser = document.createElement("p");
+    pUser.classList.add("username");
+    pUser.textContent = x.data.login;
+
+  let pLocale = document.createElement("p");
+    // function returnLocation(a) {
+    //   if (a.data.location = null) {
+    //     return "Over the Rainbow";
+    //   } else { return a.data.location}
+    // };
+    pLocale.textContent = x.data.location;
+  let pProfile = document.createElement("p");
+
+  let aLink = document.createElement("a");
+    aLink.setAttribute("href", `${x.data.html_url}`);
+    aLink.textContent = x.data.html_url;
+
+  let pFollowers = document.createElement("p");
+    pFollowers.textContent = `Followers: ${x.data.followers}`;
+  let pFollowing = document.createElement("p");
+    pFollowing.textContent = `Following: ${x.data.following}`;
+  let pBio = document.createElement("p");
+    pBio.textContent = `Bio: ${x.data.bio}`
+
+  container.appendChild(card);
+    card.appendChild(image);
+    card.appendChild(cardInfo);
+      cardInfo.appendChild(hThree);
+      cardInfo.appendChild(pUser);
+      cardInfo.appendChild(pLocale);
+      cardInfo.appendChild(pProfile);
+        pProfile.appendChild(aLink);
+      cardInfo.appendChild(pFollowers);
+      cardInfo.appendChild(pFollowing);
+      cardInfo.appendChild(pBio);
+
+  return container;
+}
+
+createCard();
 
 /* List of LS Instructors Github username's: 
   tetondan
@@ -53,3 +140,6 @@ const followersArray = [];
   luishrd
   bigknell
 */
+
+
+
